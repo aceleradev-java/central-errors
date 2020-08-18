@@ -39,7 +39,7 @@ public class Event {
     @Column
     @NotNull
     @Size(max = 255)
-    private String descricao;
+    private String description;
     
     @Column
     @NotNull
