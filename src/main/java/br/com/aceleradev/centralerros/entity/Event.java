@@ -34,7 +34,6 @@ public class Event {
     
     @Column
     @NotNull
-    @Size(max = 50)
     private Level level;
     
     @Column
