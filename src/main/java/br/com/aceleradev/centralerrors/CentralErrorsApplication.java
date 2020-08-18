@@ -1,13 +1,13 @@
-package br.com.aceleradev.centralerros;
+package br.com.aceleradev.centralerrors;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CentralErrosApplication {
+public class CentralErrorsApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CentralErrosApplication.class, args);
+		SpringApplication.run(CentralErrorsApplication.class, args);
 	}
 
 }

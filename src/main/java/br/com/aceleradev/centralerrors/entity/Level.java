@@ -1,4 +1,4 @@
-package br.com.aceleradev.centralerros.entity;
+package br.com.aceleradev.centralerrors.entity;
 
 public enum Level {
     ERROR,
