@@ -1,8 +1,9 @@
 package br.com.aceleradev.centralerrors.service;
 
-import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.aceleradev.centralerrors.EventRepository;
@@ -26,8 +27,8 @@ public class EventService implements EventServiceInterface {
     }
 
     @Override
-    public List<Event> findAll() {
-        return repository.findAll();
+    public Page<Event> findAll(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
 }
