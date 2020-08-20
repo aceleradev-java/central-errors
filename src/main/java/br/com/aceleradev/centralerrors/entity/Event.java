@@ -32,6 +32,14 @@ public class Event {
         this.date = LocalDateTime.now();
     }
 
+    public Event(Level level, String description, String log, String source) {
+        this.level = level;
+        this.description = description;
+        this.log = log;
+        this.source = source;
+        this.date = LocalDateTime.now();
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
