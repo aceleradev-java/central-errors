@@ -1,7 +1,5 @@
 package br.com.aceleradev.centralerrors.endpoint;
 
-import java.util.Optional;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.aceleradev.centralerrors.dto.EventRequestDTO;
+import br.com.aceleradev.centralerrors.dto.EventResponseDTO;
+import br.com.aceleradev.centralerrors.dto.EventResponseDetailsDTO;
 import br.com.aceleradev.centralerrors.entity.Event;
 import br.com.aceleradev.centralerrors.service.EventServiceInterface;
 import lombok.AllArgsConstructor;
@@ -23,17 +24,20 @@ public class EventController {
     private EventServiceInterface service;
     
     @PostMapping
-    public Event save(@RequestBody Event event) {
-        return service.save(event);
+    public EventResponseDetailsDTO save(@RequestBody EventRequestDTO eventRequestDTO) {
+        Event event = eventRequestDTO.mapToEvent();
+        return EventResponseDetailsDTO.map(service.save(event));
     }
     
     @GetMapping("/{id}")
-    public Optional<Event> findById(@PathVariable("id") Long id) {
-        return service.findById(id);
+    public EventResponseDetailsDTO findById(@PathVariable("id") Long id) {
+        Event event = service.findById(id).orElse(new Event());
+        return EventResponseDetailsDTO.map(event);
     }
     
     @GetMapping
-    public Page<Event> findAll(Pageable pageable) {
-        return service.findAll(pageable);
+    public Page<EventResponseDTO> findAll2(Pageable pageable) {
+        Page<Event> events = service.findAll(pageable);
+        return EventResponseDTO.map(events);
     }
 }
