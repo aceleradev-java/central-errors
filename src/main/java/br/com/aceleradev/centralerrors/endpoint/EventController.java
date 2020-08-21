@@ -7,12 +7,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.aceleradev.centralerrors.dto.EventRequestDTO;
 import br.com.aceleradev.centralerrors.dto.EventResponseDTO;
 import br.com.aceleradev.centralerrors.dto.EventResponseDetailsDTO;
 import br.com.aceleradev.centralerrors.entity.Event;
+import br.com.aceleradev.centralerrors.entity.Level;
 import br.com.aceleradev.centralerrors.service.EventServiceInterface;
 import lombok.AllArgsConstructor;
 
@@ -36,8 +38,16 @@ public class EventController {
     }
     
     @GetMapping
-    public Page<EventResponseDTO> findAll2(Pageable pageable) {
-        Page<Event> events = service.findAll(pageable);
+    public Page<EventResponseDTO> findAll2(
+            @RequestParam(name = "level", required = false) Level level, 
+            Pageable pageable) {
+        Page<Event> events;
+        if (level != null) {
+            events = service.findByLevel(level, pageable);
+            return EventResponseDTO.map(events);
+        }
+        events = service.findAll(pageable);
         return EventResponseDTO.map(events);
     }
+    
 }

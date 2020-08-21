@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.aceleradev.centralerrors.EventRepository;
 import br.com.aceleradev.centralerrors.entity.Event;
+import br.com.aceleradev.centralerrors.entity.Level;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -29,6 +30,11 @@ public class EventService implements EventServiceInterface {
     @Override
     public Page<Event> findAll(Pageable pageable) {
         return repository.findAll(pageable);
+    }
+    
+    @Override
+    public Page<Event> findByLevel(Level level, Pageable pageable) {
+        return repository.findByLevel(level, pageable);
     }
 
 }
