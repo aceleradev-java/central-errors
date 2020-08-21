@@ -14,4 +14,5 @@ public interface EventServiceInterface {
     Optional<Event> findById(Long id);
     Page<Event> findAll(Pageable pageable);
     Page<Event> findByLevel(Level level,Pageable pageable);
+    Page<Event> findByDescriptionContaining( String description, Pageable pageable);
 }

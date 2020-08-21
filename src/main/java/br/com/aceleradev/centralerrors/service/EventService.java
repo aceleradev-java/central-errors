@@ -36,5 +36,10 @@ public class EventService implements EventServiceInterface {
     public Page<Event> findByLevel(Level level, Pageable pageable) {
         return repository.findByLevel(level, pageable);
     }
+    
+    @Override
+    public Page<Event> findByDescriptionContaining( String description, Pageable pageable) {
+        return repository.findByDescriptionContaining(description, pageable);
+    }
 
 }

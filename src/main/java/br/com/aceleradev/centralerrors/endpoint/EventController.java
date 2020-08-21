@@ -40,12 +40,20 @@ public class EventController {
     @GetMapping
     public Page<EventResponseDTO> findAll2(
             @RequestParam(name = "level", required = false) Level level, 
+            @RequestParam(name = "description", required = false) String description, 
             Pageable pageable) {
         Page<Event> events;
+
         if (level != null) {
             events = service.findByLevel(level, pageable);
             return EventResponseDTO.map(events);
         }
+        
+        if (description != null) {
+            events = service.findByDescriptionContaining(description, pageable);
+            return EventResponseDTO.map(events);
+        }
+        
         events = service.findAll(pageable);
         return EventResponseDTO.map(events);
     }
