@@ -12,4 +12,5 @@ import br.com.aceleradev.centralerrors.entity.Level;
 public interface EventRepository extends PagingAndSortingRepository<Event, Long>{
     Page<Event> findByLevel( Level level, Pageable pageable);
     Page<Event> findByDescriptionContaining( String description, Pageable pageable);
+    Page<Event> findByLogContaining( String log, Pageable pageable);
 }
