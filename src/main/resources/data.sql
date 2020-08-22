@@ -29,3 +29,5 @@ insert into events(level,description, log, source, date) values(2, 'erro 27', 'l
 insert into events(level,description, log, source, date) values(0, 'erro 28', 'log 1', 'api', '2020-05-18T21:02:44.206');
 insert into events(level,description, log, source, date) values(0, 'erro 29', 'log 1', 'sistema', '2001-09-18T21:02:44.206');
 insert into events(level,description, log, source, date) values(2, 'erro 30', 'log 1', 'sistema', '2000-04-18T21:02:44.206');
+insert into users (admin, name, password, username) values (true, 'chefe admin', '$2a$10$ducSxcGpqml61rkTOB5R4OJ9OznbG1gUCP7Q2/xj6mtuBB0lVBLCu', 'admin');
+insert into users (admin, name, password, username) values (false, 'fulano user', '$2a$10$ducSxcGpqml61rkTOB5R4OJ9OznbG1gUCP7Q2/xj6mtuBB0lVBLCu', 'user');
