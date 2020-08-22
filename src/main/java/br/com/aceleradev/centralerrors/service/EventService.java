@@ -1,5 +1,6 @@
 package br.com.aceleradev.centralerrors.service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -50,6 +51,11 @@ public class EventService implements EventServiceInterface {
     @Override
     public Page<Event> findBySourceContaining( String source, Pageable pageable) {
         return repository.findBySourceContaining(source, pageable);
+    }
+    
+    @Override
+    public     Page<Event> findByDate( LocalDateTime date, Pageable pageable) {
+        return repository.findByDate(date, pageable);
     }
 
 }

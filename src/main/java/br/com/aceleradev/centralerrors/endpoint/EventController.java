@@ -1,7 +1,10 @@
 package br.com.aceleradev.centralerrors.endpoint;
 
+import java.time.LocalDateTime;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,9 +46,11 @@ public class EventController {
             @RequestParam(name = "description", required = false) String description, 
             @RequestParam(name = "log", required = false) String log,
             @RequestParam(name = "source", required = false) String source,
+            @RequestParam(name = "date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date,
             Pageable pageable) {
         Page<Event> events;
 
+        
         if (level != null) {
             events = service.findByLevel(level, pageable);
             return EventResponseDTO.map(events);
@@ -63,6 +68,11 @@ public class EventController {
         
         if (source != null) {
             events = service.findBySourceContaining(source, pageable);
+            return EventResponseDTO.map(events);
+        }
+        
+        if (date != null) {
+            events = service.findByDate(date, pageable);
             return EventResponseDTO.map(events);
         }
         

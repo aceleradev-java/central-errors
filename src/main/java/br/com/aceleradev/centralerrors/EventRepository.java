@@ -1,5 +1,7 @@
 package br.com.aceleradev.centralerrors;
 
+import java.time.LocalDateTime;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -14,4 +16,5 @@ public interface EventRepository extends PagingAndSortingRepository<Event, Long>
     Page<Event> findByDescriptionContaining( String description, Pageable pageable);
     Page<Event> findByLogContaining( String log, Pageable pageable);
     Page<Event> findBySourceContaining( String source, Pageable pageable);
+    Page<Event> findByDate( LocalDateTime date, Pageable pageable);
 }
