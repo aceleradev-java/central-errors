@@ -42,6 +42,7 @@ public class EventController {
             @RequestParam(name = "level", required = false) Level level, 
             @RequestParam(name = "description", required = false) String description, 
             @RequestParam(name = "log", required = false) String log,
+            @RequestParam(name = "source", required = false) String source,
             Pageable pageable) {
         Page<Event> events;
 
@@ -57,6 +58,11 @@ public class EventController {
         
         if (log != null) {
             events = service.findByLogContaining(log, pageable);
+            return EventResponseDTO.map(events);
+        }
+        
+        if (source != null) {
+            events = service.findBySourceContaining(source, pageable);
             return EventResponseDTO.map(events);
         }
         

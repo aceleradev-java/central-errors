@@ -46,5 +46,10 @@ public class EventService implements EventServiceInterface {
     public Page<Event> findByLogContaining( String log, Pageable pageable) {
         return repository.findByLogContaining(log, pageable);
     }
+    
+    @Override
+    public Page<Event> findBySourceContaining( String source, Pageable pageable) {
+        return repository.findBySourceContaining(source, pageable);
+    }
 
 }
