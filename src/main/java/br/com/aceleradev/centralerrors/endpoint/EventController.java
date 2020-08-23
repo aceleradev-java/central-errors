@@ -23,24 +23,24 @@ import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/events")
+@RequestMapping("v1")
 public class EventController {
     
     private EventServiceInterface service;
     
-    @PostMapping
+    @PostMapping(path = "admin/events")
     public EventResponseDetailsDTO save(@RequestBody EventRequestDTO eventRequestDTO) {
         Event event = eventRequestDTO.mapToEvent();
         return EventResponseDetailsDTO.map(service.save(event));
     }
     
-    @GetMapping("/{id}")
+    @GetMapping(path = "protected/events/{id}")
     public EventResponseDetailsDTO findById(@PathVariable("id") Long id) {
         Event event = service.findById(id).orElse(new Event());
         return EventResponseDetailsDTO.map(event);
     }
     
-    @GetMapping
+    @GetMapping(path = "protected/events")
     public Page<EventResponseDTO> findAll2(
             @RequestParam(name = "level", required = false) Level level, 
             @RequestParam(name = "description", required = false) String description, 
