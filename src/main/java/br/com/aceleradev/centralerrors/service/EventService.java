@@ -1,10 +1,15 @@
 package br.com.aceleradev.centralerrors.service;
 
+import static br.com.aceleradev.centralerrors.EventSpecification.*;
+import static org.springframework.data.jpa.domain.Specification.where;
+
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import br.com.aceleradev.centralerrors.EventRepository;
@@ -58,4 +63,19 @@ public class EventService implements EventServiceInterface {
         return repository.findByDate(date, pageable);
     }
 
+    @Override
+    public List<Event> query(String log, String description, Level level, String source, LocalDateTime date) {
+        Specification<Event> specificationLog = hasLog(log);
+        Specification<Event> specificationDescription = descriptionContains(description);
+        Specification<Event> specificationLevel = hasLevel(level);
+        Specification<Event> specificationSource = sourceContains(source);
+        Specification<Event> specificationDate = hasDate(date);
+        return repository.findAll(where(specificationLog)
+                .and(specificationDescription)
+                .and(specificationLevel)
+                .and(specificationSource)
+                .and(specificationDate)
+        );
+    }
+    
 }

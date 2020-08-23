@@ -3,6 +3,7 @@ package br.com.aceleradev.centralerrors.service;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Pageable;
@@ -20,4 +21,6 @@ public interface EventServiceInterface {
     Page<Event> findByLogContaining( String log, Pageable pageable);
     Page<Event> findBySourceContaining( String source, Pageable pageable);
     Page<Event> findByDate( LocalDateTime date, Pageable pageable);
+    List<Event> query(String log, String description, Level level, String source, LocalDateTime date);
+
 }
