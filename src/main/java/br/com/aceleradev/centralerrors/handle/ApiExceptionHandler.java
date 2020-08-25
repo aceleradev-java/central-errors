@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -50,4 +51,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     private String getInvalidFieldName(ObjectError error) {
         return ((FieldError) error).getField();
     }
+
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(
+            HttpMessageNotReadableException ex, HttpHeaders headers,
+            HttpStatus status, WebRequest request) {
+        return new ResponseEntity<>(new Problem(status.value(), LocalDateTime.now(), ex.getMessage(), null), HttpStatus.BAD_REQUEST);
+    }
+    
 }
