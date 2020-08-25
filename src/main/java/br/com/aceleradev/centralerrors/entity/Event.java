@@ -32,12 +32,13 @@ import lombok.NoArgsConstructor;
 @Table(name = "events")
 public class Event {
 
-    public Event(Level level, String description, String log, String source) {
+    public Event(Level level, String description, String log, String source, Integer quantity) {
         this.level = level;
         this.description = description;
         this.log = log;
         this.source = source;
         this.date = LocalDateTime.now();
+        this.quantity = quantity;
     }
 
     @Id
@@ -67,4 +68,8 @@ public class Event {
     @Column
     @CreatedDate
     private LocalDateTime date;
+    
+    @Column
+    @NotNull
+    private Integer quantity;
 }

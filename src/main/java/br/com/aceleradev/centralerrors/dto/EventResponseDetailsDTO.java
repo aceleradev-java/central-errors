@@ -18,6 +18,7 @@ public class EventResponseDetailsDTO {
     private String source;
     private String log;
     private LocalDateTime date;
+    private Integer quantity;
     
     public static EventResponseDetailsDTO map(Event event) {
         return new EventResponseDetailsDTO(
@@ -26,7 +27,8 @@ public class EventResponseDetailsDTO {
                     event.getDescription(), 
                     event.getSource(), 
                     event.getLog(), 
-                    event.getDate()
+                    event.getDate(),
+                    event.getQuantity()
                 );
     }
 }

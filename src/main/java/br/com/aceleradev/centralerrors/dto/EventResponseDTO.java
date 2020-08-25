@@ -18,6 +18,7 @@ public class EventResponseDTO {
     private String description;
     private String source;
     private LocalDateTime date;
+    private Integer quantity;
     
     public static Page<EventResponseDTO> map(Page<Event> events) {
         return events.map(EventResponseDTO::convertToEventResponseDTO);
@@ -29,7 +30,8 @@ public class EventResponseDTO {
                     event.getLevel(), 
                     event.getDescription(), 
                     event.getSource(), 
-                    event.getDate()
+                    event.getDate(),
+                    event.getQuantity()
                 );
     }
 }

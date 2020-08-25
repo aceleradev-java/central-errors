@@ -11,9 +11,10 @@ public class EventRequestDTO {
     private String description;
     private String source;
     private String log;
+    private Integer quantity;
     
     public Event mapToEvent() {
-        return new Event(this.level, this.description, this.log, this.source);
+        return new Event(this.level, this.description, this.log, this.source, this.quantity);
     }
 
 }
