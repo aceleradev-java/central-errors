@@ -1,7 +1,6 @@
 package br.com.aceleradev.centralerrors.endpoint;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -42,53 +41,15 @@ public class EventController {
     }
     
     @GetMapping(path = "protected/events")
-    public Page<EventResponseDTO> findAll2(
-            @RequestParam(name = "level", required = false) Level level, 
-            @RequestParam(name = "description", required = false) String description, 
-            @RequestParam(name = "log", required = false) String log,
-            @RequestParam(name = "source", required = false) String source,
-            @RequestParam(name = "date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date,
-            Pageable pageable) {
-        Page<Event> events;
-
-        
-        if (level != null) {
-            events = service.findByLevel(level, pageable);
-            return EventResponseDTO.map(events);
-        }
-        
-        if (description != null) {
-            events = service.findByDescriptionContaining(description, pageable);
-            return EventResponseDTO.map(events);
-        }
-        
-        if (log != null) {
-            events = service.findByLogContaining(log, pageable);
-            return EventResponseDTO.map(events);
-        }
-        
-        if (source != null) {
-            events = service.findBySourceContaining(source, pageable);
-            return EventResponseDTO.map(events);
-        }
-        
-        if (date != null) {
-            events = service.findByDate(date, pageable);
-            return EventResponseDTO.map(events);
-        }
-        
-        events = service.findAll(pageable);
-        return EventResponseDTO.map(events);
-    }
-    
-    @GetMapping(path = "/events")
-    public List<Event> query(
+    public Page<EventResponseDTO> findAll(
             @RequestParam(name = "log", required = false, defaultValue = "") String log,
             @RequestParam(name = "level", required = false) Level level,
             @RequestParam(name = "date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date,
             @RequestParam(name = "source", required = false, defaultValue = "") String source,
-            @RequestParam(name = "description", required = false, defaultValue = "") String description) {
-        return service.query(log, description, level, source, date);
+            @RequestParam(name = "description", required = false, defaultValue = "") String description,
+            Pageable pageable) {
+        Page<Event> events = service.findAll(log, description, level, source, date, pageable);
+        return EventResponseDTO.map(events);
     }
     
 }
