@@ -2,6 +2,8 @@ package br.com.aceleradev.centralerrors.endpoint;
 
 import java.time.LocalDateTime;
 
+import javax.validation.Valid;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -18,6 +20,7 @@ import br.com.aceleradev.centralerrors.dto.EventResponseDTO;
 import br.com.aceleradev.centralerrors.dto.EventResponseDetailsDTO;
 import br.com.aceleradev.centralerrors.entity.Event;
 import br.com.aceleradev.centralerrors.entity.Level;
+import br.com.aceleradev.centralerrors.exception.EntityNotFound;
 import br.com.aceleradev.centralerrors.service.EventServiceInterface;
 import lombok.AllArgsConstructor;
 
@@ -29,14 +32,14 @@ public class EventController {
     private EventServiceInterface service;
     
     @PostMapping(path = "admin/events")
-    public EventResponseDetailsDTO save(@RequestBody EventRequestDTO eventRequestDTO) {
+    public EventResponseDetailsDTO save(@Valid @RequestBody EventRequestDTO eventRequestDTO) {
         Event event = eventRequestDTO.mapToEvent();
         return EventResponseDetailsDTO.map(service.save(event));
     }
     
     @GetMapping(path = "protected/events/{id}")
     public EventResponseDetailsDTO findById(@PathVariable("id") Long id) {
-        Event event = service.findById(id).orElse(new Event());
+        Event event = service.findById(id).orElseThrow(() -> new EntityNotFound("Event not found"));
         return EventResponseDetailsDTO.map(event);
     }
     
