@@ -28,6 +28,7 @@ public class EventService implements EventServiceInterface {
 
     @Override
     public Event save(Event event) {
+        event.setDate(LocalDateTime.now());
         return repository.save(event);
     }
 

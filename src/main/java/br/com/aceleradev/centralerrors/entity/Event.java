@@ -21,18 +21,16 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Entity
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 @EntityListeners(AuditingEntityListener.class)
 @EqualsAndHashCode(of = "id")
 @Table(name = "events")
 public class Event {
-
-    public Event() {
-        this.date = LocalDateTime.now();
-    }
 
     public Event(Level level, String description, String log, String source) {
         this.level = level;
