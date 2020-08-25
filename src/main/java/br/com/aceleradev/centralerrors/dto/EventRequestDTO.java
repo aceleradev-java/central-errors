@@ -1,16 +1,26 @@
 package br.com.aceleradev.centralerrors.dto;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import br.com.aceleradev.centralerrors.entity.Event;
 import br.com.aceleradev.centralerrors.entity.Level;
 import lombok.Getter;
 
 @Getter
 public class EventRequestDTO {
-    
+    @NotNull
     private Level level;
+    @NotNull
+    @NotBlank
     private String description;
+    @NotNull
+    @NotBlank
     private String source;
+    @NotNull
+    @NotBlank
     private String log;
+    @NotNull
     private Integer quantity;
     
     public Event mapToEvent() {
