@@ -18,6 +18,7 @@ public class Problem {
     private Integer status;
     private LocalDateTime date;
     private String title;
+    private String detail;
     private List<Field> fields;
     
     @AllArgsConstructor

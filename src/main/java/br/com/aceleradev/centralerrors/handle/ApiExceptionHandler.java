@@ -2,7 +2,9 @@ package br.com.aceleradev.centralerrors.handle;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpHeaders;
@@ -19,6 +21,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+
+import antlr.debug.Event;
+import br.com.aceleradev.centralerrors.entity.Level;
+import br.com.aceleradev.centralerrors.enums.ValueOfEnum;
 import br.com.aceleradev.centralerrors.error.Problem;
 import br.com.aceleradev.centralerrors.error.Problem.Field;
 import br.com.aceleradev.centralerrors.exception.EntityNotFound;
@@ -31,14 +39,22 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseBody
     public Problem handleEntityNotFound(EntityNotFound ex, WebRequest request) {
         HttpStatus status = HttpStatus.NOT_FOUND;
-        return new Problem(status.value(), LocalDateTime.now(), ex.getMessage(), new ArrayList<Field>());
+        return new Problem(status.value(), LocalDateTime.now(), ex.getMessage(), null, new ArrayList<Field>());
+    }
+    
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST) 
+    @ResponseBody
+    public Problem handleEntityNotFound2(EntityNotFound ex, WebRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        return new Problem(status.value(), LocalDateTime.now(), ex.getMessage(), null, new ArrayList<Field>());
     }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         List<Field> invalidFields = getErrors(ex);
 
-        Problem problem = new Problem(status.value(), LocalDateTime.now(),"One or more fields are invalid. Fill in correctly and try again.", invalidFields);
+        Problem problem = new Problem(status.value(), LocalDateTime.now(),"One or more fields are invalid. Fill in correctly and try again.", null, invalidFields);
         return super.handleExceptionInternal(ex, problem, headers, status, request);
     }
     
@@ -56,7 +72,23 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleHttpMessageNotReadable(
             HttpMessageNotReadableException ex, HttpHeaders headers,
             HttpStatus status, WebRequest request) {
-        return new ResponseEntity<>(new Problem(status.value(), LocalDateTime.now(), ex.getMessage(), null), HttpStatus.BAD_REQUEST);
+
+        if (isFieldLevelValid(ex)) {
+            String msg = "One or more fields are invalid. Fill in correctly and try again.";
+            List<Field> fields = new ArrayList<>();
+            fields.add(new Field("level", "must to be ERROR, WARNING or INFO"));
+            return new ResponseEntity<>(new Problem(status.value(), LocalDateTime.now(), msg, null, fields), HttpStatus.BAD_REQUEST);
+        }
+
+        String message = "Incopreensible message. The request body is invalid. Check syntax error.";
+        Problem problem = new Problem(status.value(), LocalDateTime.now(), message, ex.getLocalizedMessage(), null);
+        return handleExceptionInternal(ex, problem, headers, status, request);
     }
-    
+
+    private boolean isFieldLevelValid(HttpMessageNotReadableException ex) {
+        Throwable mostSpecificCause = ex.getMostSpecificCause();
+        return mostSpecificCause instanceof InvalidFormatException 
+                && mostSpecificCause.getMessage().contains("[ERROR, WARNING, INFO]");
+    }
+
 }
