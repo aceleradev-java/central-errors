@@ -2,9 +2,7 @@ package br.com.aceleradev.centralerrors.handle;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpHeaders;
@@ -21,12 +19,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
-import antlr.debug.Event;
-import br.com.aceleradev.centralerrors.entity.Level;
-import br.com.aceleradev.centralerrors.enums.ValueOfEnum;
 import br.com.aceleradev.centralerrors.error.Problem;
 import br.com.aceleradev.centralerrors.error.Problem.Field;
 import br.com.aceleradev.centralerrors.exception.EntityNotFound;
