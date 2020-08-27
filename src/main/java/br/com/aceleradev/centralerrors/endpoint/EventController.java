@@ -22,7 +22,7 @@ import br.com.aceleradev.centralerrors.dto.EventRequestDTO;
 import br.com.aceleradev.centralerrors.dto.EventResponseDTO;
 import br.com.aceleradev.centralerrors.dto.EventResponseDetailsDTO;
 import br.com.aceleradev.centralerrors.entity.Event;
-import br.com.aceleradev.centralerrors.entity.Level;
+import br.com.aceleradev.centralerrors.enums.Level;
 import br.com.aceleradev.centralerrors.exception.EntityNotFound;
 import br.com.aceleradev.centralerrors.service.EventServiceInterface;
 import lombok.AllArgsConstructor;

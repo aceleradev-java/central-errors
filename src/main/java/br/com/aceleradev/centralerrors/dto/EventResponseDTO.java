@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import org.springframework.data.domain.Page;
 
 import br.com.aceleradev.centralerrors.entity.Event;
-import br.com.aceleradev.centralerrors.entity.Level;
+import br.com.aceleradev.centralerrors.enums.Level;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

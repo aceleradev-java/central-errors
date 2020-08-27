@@ -9,7 +9,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import br.com.aceleradev.centralerrors.entity.Event;
-import br.com.aceleradev.centralerrors.entity.Level;
+import br.com.aceleradev.centralerrors.enums.Level;
 
 @Repository
 public interface EventRepository extends PagingAndSortingRepository<Event, Long>, JpaSpecificationExecutor<Event>{

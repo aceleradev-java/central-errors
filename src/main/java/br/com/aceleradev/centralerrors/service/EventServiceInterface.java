@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import br.com.aceleradev.centralerrors.entity.Event;
-import br.com.aceleradev.centralerrors.entity.Level;
+import br.com.aceleradev.centralerrors.enums.Level;
 
 
 public interface EventServiceInterface {
