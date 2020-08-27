@@ -59,8 +59,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
             HttpMessageNotReadableException ex, HttpHeaders headers,
             HttpStatus status, WebRequest request) {
 
-        if (isFieldLevelValid(ex)) {
-            String msg = "One or more fields are invalid. Fill in correctly and try again.";
+        if (isTheValueOfTheLevelFieldInvalid(ex)) {
+            String msg = "The level field is invalid. Fill in correctly and try again.";
             List<Field> fields = new ArrayList<>();
             fields.add(new Field("level", "must to be ERROR, WARNING or INFO"));
             return new ResponseEntity<>(new Problem(status.value(), LocalDateTime.now(), msg, null, fields), HttpStatus.BAD_REQUEST);
@@ -71,7 +71,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, problem, headers, status, request);
     }
 
-    private boolean isFieldLevelValid(HttpMessageNotReadableException ex) {
+    private boolean isTheValueOfTheLevelFieldInvalid(HttpMessageNotReadableException ex) {
         Throwable mostSpecificCause = ex.getMostSpecificCause();
         return mostSpecificCause instanceof InvalidFormatException 
                 && mostSpecificCause.getMessage().contains("[ERROR, WARNING, INFO]");
