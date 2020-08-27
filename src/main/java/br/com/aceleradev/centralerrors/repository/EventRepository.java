@@ -1,4 +1,4 @@
-package br.com.aceleradev.centralerrors;
+package br.com.aceleradev.centralerrors.repository;
 
 import java.time.LocalDateTime;
 

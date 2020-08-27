@@ -15,10 +15,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import br.com.aceleradev.centralerrors.EventRepository;
 import br.com.aceleradev.centralerrors.entity.Event;
 import br.com.aceleradev.centralerrors.entity.Level;
 import br.com.aceleradev.centralerrors.exception.EntityNotFound;
+import br.com.aceleradev.centralerrors.repository.EventRepository;
 import lombok.AllArgsConstructor;
 
 @Service
