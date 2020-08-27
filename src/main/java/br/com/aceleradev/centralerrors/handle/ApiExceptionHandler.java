@@ -36,14 +36,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return new Problem(status.value(), LocalDateTime.now(), ex.getMessage(), null, new ArrayList<Field>());
     }
     
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST) 
-    @ResponseBody
-    public Problem handleEntityNotFound2(EntityNotFound ex, WebRequest request) {
-        HttpStatus status = HttpStatus.BAD_REQUEST;
-        return new Problem(status.value(), LocalDateTime.now(), ex.getMessage(), null, new ArrayList<Field>());
-    }
-
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         List<Field> invalidFields = getErrors(ex);
