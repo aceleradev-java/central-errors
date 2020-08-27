@@ -23,7 +23,6 @@ import br.com.aceleradev.centralerrors.dto.EventResponseDTO;
 import br.com.aceleradev.centralerrors.dto.EventResponseDetailsDTO;
 import br.com.aceleradev.centralerrors.entity.Event;
 import br.com.aceleradev.centralerrors.enums.Level;
-import br.com.aceleradev.centralerrors.exception.EntityNotFound;
 import br.com.aceleradev.centralerrors.service.EventServiceInterface;
 import lombok.AllArgsConstructor;
 
@@ -43,7 +42,7 @@ public class EventController {
     
     @GetMapping(path = "protected/events/{id}")
     public EventResponseDetailsDTO findById(@PathVariable("id") Long id) {
-        Event event = service.findById(id).orElseThrow(() -> new EntityNotFound("Event not found"));
+        Event event = service.findById(id);
         return EventResponseDetailsDTO.map(event);
     }
     

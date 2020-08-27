@@ -8,7 +8,6 @@ import static br.com.aceleradev.centralerrors.EventSpecification.sourceContains;
 import static org.springframework.data.jpa.domain.Specification.where;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,8 +33,8 @@ public class EventService implements EventServiceInterface {
     }
 
     @Override
-    public Optional<Event> findById(Long id) {
-        return repository.findById(id);
+    public Event findById(Long id) {
+        return repository.findById(id).orElseThrow(() -> new EntityNotFound("Event not found"));
     }
 
     @Override
