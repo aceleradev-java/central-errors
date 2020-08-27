@@ -14,4 +14,5 @@ public interface EventServiceInterface {
     Event save(Event event);
     Optional<Event> findById(Long id);
     Page<Event> findAll(String log, String description, Level level, String source, LocalDateTime date, Pageable pageable);
+    void delete(Long id);
 }

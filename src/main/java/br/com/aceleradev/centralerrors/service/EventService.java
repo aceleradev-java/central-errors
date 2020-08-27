@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import br.com.aceleradev.centralerrors.EventRepository;
 import br.com.aceleradev.centralerrors.entity.Event;
 import br.com.aceleradev.centralerrors.entity.Level;
+import br.com.aceleradev.centralerrors.exception.EntityNotFound;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -49,6 +50,13 @@ public class EventService implements EventServiceInterface {
                 .and(specificationSource)
                 .and(specificationDate),
         pageable );
+    }
+
+    @Override
+    public void delete(Long id) {
+        Event event = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFound("Event not found"));
+        repository.delete(event);
     }
     
 }
