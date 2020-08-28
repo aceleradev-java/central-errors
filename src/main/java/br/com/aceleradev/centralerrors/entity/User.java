@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+import com.sun.istack.NotNull;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,6 +31,6 @@ public class User {
     private String password;
     @NotEmpty
     private String name;
-    @NotEmpty
+    @NotNull
     private boolean admin;
 }
