@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.aceleradev.centralerrors.dto.UserResponse;
+import br.com.aceleradev.centralerrors.dto.UserResquestUpdate;
+import br.com.aceleradev.centralerrors.dto.UserRequestRegistration;
 import br.com.aceleradev.centralerrors.entity.User;
 import br.com.aceleradev.centralerrors.service.UserServiceInterface;
 import lombok.AllArgsConstructor;
@@ -27,13 +30,14 @@ public class UserController {
     
     @PostMapping(path = "admin/users")
     @ResponseStatus(HttpStatus.CREATED)
-    public User save(@Valid @RequestBody User user) {
-        return service.save(user);
+    public UserResponse save(@Valid @RequestBody UserRequestRegistration userDTO) {
+        User user = userDTO.mapToUser();
+        return UserResponse.mapUserToUserResponseDTO(service.save(user));
     }
     
     @GetMapping(path = "admin/users")
-    public Page<User> findAll(Pageable pageable) {
-        return service.findAll(pageable);
+    public Page<UserResponse> findAll(Pageable pageable) {
+        return UserResponse.map(service.findAll(pageable));
     }
     
     @GetMapping(path = "admin/users/{id}")
@@ -42,8 +46,9 @@ public class UserController {
     }
     
     @PutMapping(path = "admin/users")
-    public User update(@Valid @RequestBody User user) {
-        return service.update(user);
+    public UserResponse update(@Valid @RequestBody UserResquestUpdate userDto) {
+        User user = service.update(userDto.mapToUser());
+        return UserResponse.mapUserToUserResponseDTO(user);
     }
     
     @DeleteMapping(path = "admin/users/{id}")
