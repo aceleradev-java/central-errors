@@ -10,6 +10,7 @@ import javax.validation.constraints.NotEmpty;
 
 import com.sun.istack.NotNull;
 
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,10 +18,19 @@ import lombok.Setter;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter @Setter
 @EqualsAndHashCode(of = { "id" })
 @Table(name = "users")
 public class User {
+    
+    public User(String username, String password, String name, boolean admin) {
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.admin = admin;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
