@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.aceleradev.centralerrors.entity.User;
 import br.com.aceleradev.centralerrors.exception.EntityNotFound;
+import br.com.aceleradev.centralerrors.exception.UsernameAlreadyExists;
 import br.com.aceleradev.centralerrors.repository.UserRepository;
 import lombok.AllArgsConstructor;
 
@@ -19,9 +20,16 @@ public class UserService implements UserServiceInterface {
     
     @Override
     public User save(User user) {
+        checkUsernameAvailable(user);
         String password = encoderPassword(user.getPassword());
         user.setPassword(password);
         return repository.save(user);
+    }
+
+    private void checkUsernameAvailable(User user) {
+        if (repository.findByUsername(user.getUsername()) != null) {
+            throw new UsernameAlreadyExists("The username already exists. Choose another username");
+        }
     }
 
     private String encoderPassword(String pasword) {

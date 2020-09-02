@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import br.com.aceleradev.centralerrors.error.Problem;
 import br.com.aceleradev.centralerrors.error.Problem.Field;
 import br.com.aceleradev.centralerrors.exception.EntityNotFound;
+import br.com.aceleradev.centralerrors.exception.UsernameAlreadyExists;
 
 @RestControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
@@ -33,6 +34,14 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseBody
     public Problem handleEntityNotFound(EntityNotFound ex, WebRequest request) {
         HttpStatus status = HttpStatus.NOT_FOUND;
+        return new Problem(status.value(), LocalDateTime.now(), ex.getMessage(), null, new ArrayList<Field>());
+    }
+    
+    @ExceptionHandler(UsernameAlreadyExists.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseBody
+    public Problem handleEntityNotFound(UsernameAlreadyExists ex, WebRequest request) {
+        HttpStatus status = HttpStatus.CONFLICT;
         return new Problem(status.value(), LocalDateTime.now(), ex.getMessage(), null, new ArrayList<Field>());
     }
     
