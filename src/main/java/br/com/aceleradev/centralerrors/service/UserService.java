@@ -27,7 +27,8 @@ public class UserService implements UserServiceInterface {
     }
 
     private void checkUsernameAvailable(User user) {
-        if (repository.findByUsername(user.getUsername()) != null) {
+        User userFound = repository.findByUsername(user.getUsername());
+        if (userFound != null && !user.equals(userFound)) {
             throw new UsernameAlreadyExists("The username already exists. Choose another username");
         }
     }
@@ -44,8 +45,7 @@ public class UserService implements UserServiceInterface {
         userFound.setName(user.getName());
         userFound.setUsername(user.getUsername());
         userFound.setAdmin(user.isAdmin());
-        String password = encoderPassword(user.getPassword());
-        userFound.setPassword(password);
+        userFound.setPassword(user.getPassword());
         return save(user);
     }
 
