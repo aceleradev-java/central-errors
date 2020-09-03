@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.aceleradev.centralerrors.dto.UserRequestRegistration;
 import br.com.aceleradev.centralerrors.dto.UserResponse;
 import br.com.aceleradev.centralerrors.dto.UserResquestUpdate;
-import br.com.aceleradev.centralerrors.dto.UserRequestRegistration;
 import br.com.aceleradev.centralerrors.entity.User;
 import br.com.aceleradev.centralerrors.service.UserServiceInterface;
 import lombok.AllArgsConstructor;
@@ -45,7 +45,7 @@ public class UserController {
         return service.findById(id);
     }
     
-    @PutMapping(path = "admin/users")
+    @PutMapping(path = "protected/users")
     public UserResponse update(@Valid @RequestBody UserResquestUpdate userDto) {
         User user = service.update(userDto.mapToUser());
         return UserResponse.mapUserToUserResponseDTO(user);
