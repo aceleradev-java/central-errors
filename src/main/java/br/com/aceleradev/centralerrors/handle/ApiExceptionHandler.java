@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
 import br.com.aceleradev.centralerrors.error.Problem;
 import br.com.aceleradev.centralerrors.error.Problem.Field;
+import br.com.aceleradev.centralerrors.exception.ActionNotAllowed;
 import br.com.aceleradev.centralerrors.exception.EntityNotFound;
 import br.com.aceleradev.centralerrors.exception.UsernameAlreadyExists;
 
@@ -42,6 +43,14 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseBody
     public Problem handleEntityNotFound(UsernameAlreadyExists ex, WebRequest request) {
         HttpStatus status = HttpStatus.CONFLICT;
+        return new Problem(status.value(), LocalDateTime.now(), ex.getMessage(), null, new ArrayList<Field>());
+    }
+    
+    @ExceptionHandler(ActionNotAllowed.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseBody
+    public Problem handleEntityNotFound(ActionNotAllowed ex, WebRequest request) {
+        HttpStatus status = HttpStatus.FORBIDDEN;
         return new Problem(status.value(), LocalDateTime.now(), ex.getMessage(), null, new ArrayList<Field>());
     }
     
