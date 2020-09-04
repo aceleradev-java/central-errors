@@ -25,6 +25,7 @@ import br.com.aceleradev.centralerrors.error.Problem;
 import br.com.aceleradev.centralerrors.error.Problem.Field;
 import br.com.aceleradev.centralerrors.exception.ActionNotAllowed;
 import br.com.aceleradev.centralerrors.exception.EntityNotFound;
+import br.com.aceleradev.centralerrors.exception.PasswordNotMatchException;
 import br.com.aceleradev.centralerrors.exception.UsernameAlreadyExists;
 
 @RestControllerAdvice
@@ -51,6 +52,14 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseBody
     public Problem handleEntityNotFound(ActionNotAllowed ex, WebRequest request) {
         HttpStatus status = HttpStatus.FORBIDDEN;
+        return new Problem(status.value(), LocalDateTime.now(), ex.getMessage(), null, new ArrayList<Field>());
+    }
+    
+    @ExceptionHandler(PasswordNotMatchException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public Problem handleEntityNotFound(PasswordNotMatchException ex, WebRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
         return new Problem(status.value(), LocalDateTime.now(), ex.getMessage(), null, new ArrayList<Field>());
     }
     
