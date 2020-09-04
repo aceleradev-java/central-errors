@@ -3,6 +3,7 @@ package br.com.aceleradev.centralerrors.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import br.com.aceleradev.centralerrors.dto.UpdatePassword;
 import br.com.aceleradev.centralerrors.entity.User;
 
 public interface UserServiceInterface {
@@ -11,4 +12,5 @@ public interface UserServiceInterface {
     User findById(Long id);
     Page<User> findAll(Pageable pageable);
     void delete(Long id);
+    User updatePassword(UpdatePassword user);
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.aceleradev.centralerrors.dto.UpdatePassword;
 import br.com.aceleradev.centralerrors.dto.UserRequestRegistration;
 import br.com.aceleradev.centralerrors.dto.UserResponse;
 import br.com.aceleradev.centralerrors.dto.UserResquestUpdate;
@@ -45,9 +46,15 @@ public class UserController {
         return service.findById(id);
     }
     
-    @PutMapping(path = "protected/users")
+    @PutMapping(path = "admin/users")
     public UserResponse update(@Valid @RequestBody UserResquestUpdate userDto) {
         User user = service.update(userDto.mapToUser());
+        return UserResponse.mapUserToUserResponseDTO(user);
+    }
+    
+    @PutMapping(path = "protected/updatepassword")
+    public UserResponse updatePassword(@Valid @RequestBody UpdatePassword userWithNewPassword) {
+        User user = service.updatePassword(userWithNewPassword);
         return UserResponse.mapUserToUserResponseDTO(user);
     }
     

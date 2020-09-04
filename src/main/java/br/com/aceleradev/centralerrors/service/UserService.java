@@ -8,9 +8,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.aceleradev.centralerrors.config.AuthenticationFacadeInterface;
+import br.com.aceleradev.centralerrors.dto.UpdatePassword;
 import br.com.aceleradev.centralerrors.entity.User;
 import br.com.aceleradev.centralerrors.exception.ActionNotAllowed;
 import br.com.aceleradev.centralerrors.exception.EntityNotFound;
+import br.com.aceleradev.centralerrors.exception.PasswordNotMatchException;
 import br.com.aceleradev.centralerrors.exception.UsernameAlreadyExists;
 import br.com.aceleradev.centralerrors.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -45,30 +47,30 @@ public class UserService implements UserServiceInterface {
 
     @Override
     public User update(User user) {
-        User userFound = repository.findById(user.getId())
-                .orElseThrow(() -> new EntityNotFound(USER_NOT_FOUND));
+        if (isValidUser(user)) return save(user);
+        throw new EntityNotFound(USER_NOT_FOUND);
+    }
+
+    private boolean isValidUser(User user) {
+        return repository.findById(user.getId()).isPresent();
+    }
+    
+    @Override
+    public User updatePassword(UpdatePassword user) {
+        if (!user.getNewPassword().equals(user.getConfirmPassword())) {
+            throw new PasswordNotMatchException("The new password and confirm password not match");
+        }
         
+        User userFound = repository.findByUsername(user.getUsername());
+        if (userFound == null) throw new EntityNotFound(USER_NOT_FOUND);
         Authentication authentication = authenticationFacade.getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        
-        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) authentication.getPrincipal(); 
-
-        if(userDetails.getAuthorities().toString().contains("ROLE_ADMIN")){
-            userFound.setName(user.getName());
-            userFound.setUsername(user.getUsername());
-            userFound.setAdmin(user.isAdmin());
-            userFound.setPassword(user.getPassword());
-            return save(user);
+        if (!userFound.getUsername().equals(userDetails.getUsername())) {
+            throw new ActionNotAllowed("You don't have permission to update this user");
         }
         
-        if (repository.findByUsername(principal.getUsername()).getUsername().equals(user.getUsername())) {
-            userFound.setName(user.getName());
-            userFound.setUsername(user.getUsername());
-            userFound.setPassword(user.getPassword());
-            return save(user);
-        }
-
-        throw new ActionNotAllowed("You don't have permission to update this user");
+        userFound.setPassword(user.getNewPassword());
+        return save(userFound);
     }
 
     @Override
