@@ -2,12 +2,9 @@ package br.com.aceleradev.centralerrors.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import br.com.aceleradev.centralerrors.config.AuthenticationFacadeInterface;
 import br.com.aceleradev.centralerrors.dto.UpdatePassword;
 import br.com.aceleradev.centralerrors.entity.User;
 import br.com.aceleradev.centralerrors.exception.ActionNotAllowed;
@@ -23,7 +20,6 @@ public class UserService implements UserServiceInterface {
 
     private static final String USER_NOT_FOUND = "User not found";
     private UserRepository repository;
-    private AuthenticationFacadeInterface authenticationFacade;
     
     @Override
     public User save(User user) {
@@ -63,16 +59,16 @@ public class UserService implements UserServiceInterface {
         
         User userFound = repository.findByUsername(user.getUsername());
         if (userFound == null) throw new EntityNotFound(USER_NOT_FOUND);
-        Authentication authentication = authenticationFacade.getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        if (!userFound.getUsername().equals(userDetails.getUsername())) {
-            throw new ActionNotAllowed("You don't have permission to update this user");
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        if (!passwordEncoder.matches(user.getPassword(), userFound.getPassword())) {
+            throw new ActionNotAllowed("You don't have permission to update the password this user");
         }
-        
+
         userFound.setPassword(user.getNewPassword());
         return save(userFound);
     }
-
+    
     @Override
     public User findById(Long id) {
         return repository.findById(id)
@@ -90,5 +86,6 @@ public class UserService implements UserServiceInterface {
                 .orElseThrow(() -> new EntityNotFound(USER_NOT_FOUND));
         repository.delete(user);
     }
+
 
 }
