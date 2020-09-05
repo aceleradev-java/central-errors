@@ -21,6 +21,7 @@ import br.com.aceleradev.centralerrors.dto.UserResponse;
 import br.com.aceleradev.centralerrors.dto.UserResquestUpdate;
 import br.com.aceleradev.centralerrors.entity.User;
 import br.com.aceleradev.centralerrors.service.UserServiceInterface;
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -31,28 +32,33 @@ public class UserController {
     
     @PostMapping(path = "users")
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "Registra um novo usuário")
     public UserResponse save(@Valid @RequestBody UserRequestRegistration userDTO) {
         User user = userDTO.mapToUser();
         return UserResponse.mapUserToUserResponseDTO(service.save(user));
     }
     
     @GetMapping(path = "admin/users")
+    @ApiOperation(value = "Lista todos os usuários")
     public Page<UserResponse> findAll(Pageable pageable) {
         return UserResponse.map(service.findAll(pageable));
     }
     
     @GetMapping(path = "admin/users/{id}")
+    @ApiOperation(value = "Procura usuário por id")
     public User findById(@PathVariable("id") Long id) {
         return service.findById(id);
     }
     
     @PutMapping(path = "admin/users")
+    @ApiOperation(value = "Atualiza um usuário")
     public UserResponse update(@Valid @RequestBody UserResquestUpdate userDto) {
         User user = service.update(userDto.mapToUser());
         return UserResponse.mapUserToUserResponseDTO(user);
     }
     
     @PutMapping(path = "protected/updatepassword")
+    @ApiOperation(value = "Atualiza senha do usuário")
     public UserResponse updatePassword(@Valid @RequestBody UpdatePassword userWithNewPassword) {
         User user = service.updatePassword(userWithNewPassword);
         return UserResponse.mapUserToUserResponseDTO(user);
@@ -60,6 +66,7 @@ public class UserController {
     
     @DeleteMapping(path = "admin/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiOperation(value = "Remove um usuário")
     public void delete(@PathVariable Long id) {
         service.delete(id);
     }

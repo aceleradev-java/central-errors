@@ -24,6 +24,7 @@ import br.com.aceleradev.centralerrors.dto.EventResponseDetailsDTO;
 import br.com.aceleradev.centralerrors.entity.Event;
 import br.com.aceleradev.centralerrors.enums.Level;
 import br.com.aceleradev.centralerrors.service.EventServiceInterface;
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -35,18 +36,21 @@ public class EventController {
     
     @PostMapping(path = "admin/events")
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "Registra um novo evento")
     public EventResponseDetailsDTO save(@Valid @RequestBody EventRequestDTO eventRequestDTO) {
         Event event = eventRequestDTO.mapToEvent();
         return EventResponseDetailsDTO.map(service.save(event));
     }
     
     @GetMapping(path = "protected/events/{id}")
+    @ApiOperation(value = "Procura evento por id")
     public EventResponseDetailsDTO findById(@PathVariable("id") Long id) {
         Event event = service.findById(id);
         return EventResponseDetailsDTO.map(event);
     }
     
     @GetMapping(path = "protected/events")
+    @ApiOperation(value = "Lista todos eventos")
     public Page<EventResponseDTO> findAll(
             @RequestParam(name = "log", required = false, defaultValue = "") String log,
             @RequestParam(name = "level", required = false) Level level,
@@ -60,6 +64,7 @@ public class EventController {
     
     @DeleteMapping(path = "admin/events/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiOperation(value = "Remove um evento")
     public void delete(@PathVariable("id") Long id) {
         service.delete(id);
     }
