@@ -29,7 +29,7 @@ import lombok.AllArgsConstructor;
 public class UserController {
     private UserServiceInterface service;
     
-    @PostMapping(path = "admin/users")
+    @PostMapping(path = "users")
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponse save(@Valid @RequestBody UserRequestRegistration userDTO) {
         User user = userDTO.mapToUser();
