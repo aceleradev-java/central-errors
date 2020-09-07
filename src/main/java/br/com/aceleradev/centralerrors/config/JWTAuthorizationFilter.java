@@ -1,5 +1,9 @@
 package br.com.aceleradev.centralerrors.config;
 
+import static br.com.aceleradev.centralerrors.config.SecurityConstants.HEADER_STRING;
+import static br.com.aceleradev.centralerrors.config.SecurityConstants.SECRET;
+import static br.com.aceleradev.centralerrors.config.SecurityConstants.TOKEN_PREFIX;
+
 import java.io.IOException;
 
 import javax.servlet.FilterChain;
@@ -13,9 +17,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+import br.com.aceleradev.centralerrors.exception.ExpiredJwtToken;
 import br.com.aceleradev.centralerrors.service.CustomUserDetailService;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-import static br.com.aceleradev.centralerrors.config.SecurityConstants.*;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     private final CustomUserDetailService customUserDetailService;
@@ -42,12 +47,18 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     private UsernamePasswordAuthenticationToken getAuthenticationToken(HttpServletRequest request) {
         String token = request.getHeader(HEADER_STRING);
         if (token == null) return null;
-        String username = Jwts.parser().setSigningKey(SECRET)
-                .parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
-                .getBody()
-                .getSubject();
-        UserDetails userDetails = customUserDetailService.loadUserByUsername(username);
-        return username != null ?
-                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()) : null;
+        
+        try {
+            String username = Jwts.parser().setSigningKey(SECRET)
+                    .parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
+                    .getBody()
+                    .getSubject();
+            UserDetails userDetails = customUserDetailService.loadUserByUsername(username);
+            return username != null ?
+                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()) : null;
+                    
+        } catch (ExpiredJwtException e) {
+            throw new ExpiredJwtToken("Expired token");
+        }
     }
 }
