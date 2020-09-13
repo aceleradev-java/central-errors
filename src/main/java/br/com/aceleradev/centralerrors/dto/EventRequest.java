@@ -8,7 +8,7 @@ import br.com.aceleradev.centralerrors.enums.Level;
 import lombok.Getter;
 
 @Getter
-public class EventRequestDTO {
+public class EventRequest {
     @NotNull
     private Level level;
     @NotNull

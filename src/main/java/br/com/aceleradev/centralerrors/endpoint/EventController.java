@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.aceleradev.centralerrors.dto.EventRequestDTO;
-import br.com.aceleradev.centralerrors.dto.EventResponseDTO;
-import br.com.aceleradev.centralerrors.dto.EventResponseDetailsDTO;
+import br.com.aceleradev.centralerrors.dto.EventRequest;
+import br.com.aceleradev.centralerrors.dto.EventResponse;
+import br.com.aceleradev.centralerrors.dto.EventResponseDetails;
 import br.com.aceleradev.centralerrors.entity.Event;
 import br.com.aceleradev.centralerrors.enums.Level;
 import br.com.aceleradev.centralerrors.service.EventServiceInterface;
@@ -37,21 +37,21 @@ public class EventController {
     @PostMapping(path = "admin/events")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Registra um novo evento")
-    public EventResponseDetailsDTO save(@Valid @RequestBody EventRequestDTO eventRequestDTO) {
+    public EventResponseDetails save(@Valid @RequestBody EventRequest eventRequestDTO) {
         Event event = eventRequestDTO.mapToEvent();
-        return EventResponseDetailsDTO.map(service.save(event));
+        return EventResponseDetails.map(service.save(event));
     }
     
     @GetMapping(path = "protected/events/{id}")
     @ApiOperation(value = "Procura evento por id")
-    public EventResponseDetailsDTO findById(@PathVariable("id") Long id) {
+    public EventResponseDetails findById(@PathVariable("id") Long id) {
         Event event = service.findById(id);
-        return EventResponseDetailsDTO.map(event);
+        return EventResponseDetails.map(event);
     }
     
     @GetMapping(path = "protected/events")
     @ApiOperation(value = "Lista todos eventos")
-    public Page<EventResponseDTO> findAll(
+    public Page<EventResponse> findAll(
             @RequestParam(name = "log", required = false, defaultValue = "") String log,
             @RequestParam(name = "level", required = false) Level level,
             @RequestParam(name = "date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date,
@@ -59,7 +59,7 @@ public class EventController {
             @RequestParam(name = "description", required = false, defaultValue = "") String description,
             Pageable pageable) {
         Page<Event> events = service.findAll(log, description, level, source, date, pageable);
-        return EventResponseDTO.map(events);
+        return EventResponse.map(events);
     }
     
     @DeleteMapping(path = "admin/events/{id}")
