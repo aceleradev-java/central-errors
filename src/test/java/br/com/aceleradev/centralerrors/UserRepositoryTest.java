@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import br.com.aceleradev.centralerrors.entity.User;
 import br.com.aceleradev.centralerrors.repository.UserRepository;
 
-@SpringBootTest
+@DataJpaTest
 class UserRepositoryTest {
 
 	@Autowired
