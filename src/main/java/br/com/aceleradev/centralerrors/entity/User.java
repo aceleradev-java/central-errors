@@ -33,7 +33,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotEmpty
+    @NotEmpty(message = "The field username must not be empty")
     @Column(unique = true)
     private String username;
     @NotEmpty

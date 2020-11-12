@@ -1,7 +1,11 @@
 package br.com.aceleradev.centralerrors;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+
+import javax.validation.ConstraintViolationException;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -91,6 +95,20 @@ class UserRepositoryTest {
 		Page<User> users = this.repository.findAll(firstPageWithThreeElements);
 		
 		assertThat(3, is(users.getSize()));
+	}
+	
+	@Test
+	void shouldShowErrorWhenFieldUsernameIsEmpty() {
+		User user = createUser();
+		user.setUsername("");
+		
+		final Throwable throwable = Assertions.assertThrows(
+				ConstraintViolationException.class, 
+				() -> this.repository.save(user)
+		);
+		
+		assertThat(throwable, instanceOf(ConstraintViolationException.class));
+		assertThat(throwable.getMessage(), containsString("The field username must not be empty"));
 	}
 
 	private User createUser() {
