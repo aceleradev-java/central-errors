@@ -78,5 +78,20 @@ class UserRepositoryTest {
 		Assertions.assertNotNull(userFound);
 		assertThat("adriano", is(userFound.getUsername()));
 	}
+	
+	@Test
+	void shouldFindAllUsers() {
+		User user = createUser();
+		this.repository.save(user);
+		
+		Pageable firstPageWithThreeElements = PageRequest.of(0, 3);
+		Page<User> users = this.repository.findAll(firstPageWithThreeElements);
+		
+		assertThat(3, is(users.getSize()));
+	}
+
+	private User createUser() {
+		return new User("adriano", "123", "Adriano dos Santos", true);
+	}
 
 }
