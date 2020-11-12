@@ -7,6 +7,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import br.com.aceleradev.centralerrors.entity.User;
 import br.com.aceleradev.centralerrors.repository.UserRepository;
@@ -19,19 +22,19 @@ class UserRepositoryTest {
 
 	@Test
 	void shouldPersisteNewValidUser() {
-		User user = new User("adriano", "123", "Adriano Avelino", false);
+		User user = createUser();
 		
 		this.repository.save(user);
 		
 		assertThat(user.getUsername(), is("adriano"));
-		assertThat(user.getName(), is("Adriano Avelino"));
+		assertThat(user.getName(), is("Adriano dos Santos"));
 		assertThat(user.getPassword(), is("123"));
-		assertThat(user.isAdmin(), is(false));
+		assertThat(user.isAdmin(), is(true));
 	}
 	
 	@Test
 	void shouldDeleteAnUser() {
-		User user = new User("adriano", "123", "Adriano dos Santos", true);
+		User user = createUser();
 		this.repository.save(user);
 		assertThat(3l, is(this.repository.count()));
 		
@@ -42,7 +45,7 @@ class UserRepositoryTest {
 	
 	@Test
 	void shouldUpdateAnUser() {
-		User user = new User("adriano", "123", "Adriano dos Santos", true);
+		User user = createUser();
 		this.repository.save(user);
 		
 		user.setUsername("usuário alterado");
@@ -59,7 +62,7 @@ class UserRepositoryTest {
 	
 	@Test
 	void shouldFindUserById() {
-		User user = new User("adriano", "123", "Adriano dos Santos", true);
+		User user = createUser();
 		this.repository.save(user);
 		
 		User userFound = this.repository.findById(user.getId()).orElse(null);
@@ -70,7 +73,7 @@ class UserRepositoryTest {
 	
 	@Test
 	void shouldFinduserByUsername() {
-		User user = new User("adriano", "123", "Adriano dos Santos", true);
+		User user = createUser();
 		this.repository.save(user);
 		
 		User userFound = this.repository.findByUsername("adriano");
