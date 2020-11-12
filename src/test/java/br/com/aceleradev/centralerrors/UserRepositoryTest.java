@@ -110,6 +110,20 @@ class UserRepositoryTest {
 		assertThat(throwable, instanceOf(ConstraintViolationException.class));
 		assertThat(throwable.getMessage(), containsString("The field username must not be empty"));
 	}
+	
+	@Test
+	void shouldShowErrorWhenFieldPasswordIsEmpty() {
+		User user = createUser();
+		user.setPassword("");
+		
+		final Throwable throwable = Assertions.assertThrows(
+				ConstraintViolationException.class, 
+				() -> this.repository.save(user)
+		);
+		
+		assertThat(throwable, instanceOf(ConstraintViolationException.class));
+		assertThat(throwable.getMessage(), containsString("The field password must not be empty"));
+	}
 
 	private User createUser() {
 		return new User("adriano", "123", "Adriano dos Santos", true);

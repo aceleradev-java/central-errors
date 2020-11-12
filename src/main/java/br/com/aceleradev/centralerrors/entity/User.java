@@ -37,6 +37,7 @@ public class User {
     @Column(unique = true)
     private String username;
     @NotEmpty
+    @NotEmpty(message = "The field password must not be empty")
     private String password;
     @NotEmpty
     private String name;
