@@ -40,6 +40,7 @@ public class User {
     @NotEmpty(message = "The field password must not be empty")
     private String password;
     @NotEmpty
+    @NotEmpty(message = "The field name must not be empty")
     private String name;
     @NotNull
     private boolean admin;
