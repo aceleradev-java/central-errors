@@ -1,4 +1,4 @@
-package br.com.aceleradev.centralerrors;
+package br.com.aceleradev.centralerrors.repository;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
