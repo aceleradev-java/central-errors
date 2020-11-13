@@ -25,7 +25,7 @@ class UserRepositoryTest {
 	private UserRepository repository;
 
 	@Test
-	void shouldPersisteNewValidUser() {
+	void shouldCreateUser() {
 		User user = createUser();
 		
 		this.repository.save(user);
@@ -76,7 +76,7 @@ class UserRepositoryTest {
 	}
 	
 	@Test
-	void shouldFinduserByUsername() {
+	void shouldFindUserByUsername() {
 		User user = createUser();
 		this.repository.save(user);
 		
@@ -126,7 +126,7 @@ class UserRepositoryTest {
 	}
 	
 	@Test
-	void shouldShowErroWhenFieldNameIsEmpty() {
+	void shouldShowErrorWhenFieldNameIsEmpty() {
 		User user = createUser();
 		user.setName("");
 		
