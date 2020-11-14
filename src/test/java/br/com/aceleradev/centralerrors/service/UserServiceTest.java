@@ -67,6 +67,19 @@ class UserServiceTest {
 		//then
 		Mockito.verify(this.repository, Mockito.times(1)).delete(user);
 	}
+	
+	@Test
+	void shouldFindUserById() {
+		//given
+		User user = createUserWithId();
+		given(this.repository.findById(any(Long.class))).willReturn(Optional.of(user));
+		
+		//when
+		User userFound = this.service.findById(user.getId());
+		
+		//then
+		assertThat(user.getId(), is(userFound.getId()));
+	}
 
 	private User createUser() {
 		return new User("adriano", "123", "Adriano dos Santos", true);
