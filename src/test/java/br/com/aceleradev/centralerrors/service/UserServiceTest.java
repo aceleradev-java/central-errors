@@ -5,6 +5,8 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,6 +35,23 @@ class UserServiceTest {
 		
 		//then
 		assertThat(1l, is(userSaved.getId()));
+	}
+	
+	@Test
+	void shouldUpdateAnUser() {
+		//given
+		User userSaved = createUserWithId();
+		String nameUpdated = "Adriano Update";
+		userSaved.setName(nameUpdated);
+		given(this.repository.findById(any(Long.class))).willReturn(Optional.of(new User()));
+		given(this.repository.save(any(User.class))).willReturn(userSaved);
+		
+		//when
+		User userUpdated = this.service.update(userSaved);
+		
+		//then
+		assertThat(1l, is(userUpdated.getId()));
+		assertThat(nameUpdated, is(userUpdated.getName()));
 	}
 
 	private User createUser() {
