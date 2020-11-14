@@ -8,6 +8,7 @@ import static org.mockito.BDDMockito.given;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -52,6 +53,19 @@ class UserServiceTest {
 		//then
 		assertThat(1l, is(userUpdated.getId()));
 		assertThat(nameUpdated, is(userUpdated.getName()));
+	}
+	
+	@Test
+	void shouldDeleteAnUser() {
+		//given
+		User user = createUserWithId();
+		given(this.repository.findById(any(long.class))).willReturn(Optional.of(user));
+		
+		//when
+		this.service.delete(user.getId());
+		
+		//then
+		Mockito.verify(this.repository, Mockito.times(1)).delete(user);
 	}
 
 	private User createUser() {
