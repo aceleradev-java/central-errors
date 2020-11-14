@@ -39,3 +39,9 @@ O acesso a ela deve ser permitido apenas por requisições que utilizem um token
 - Deve suportar Ordenação por diferentes tipos de atributos
 - A consulta de listagem não deve retornar os LOGs dos Eventos
 - Deve permitir a busca de um evento por um ID, dessa maneira exibindo o LOG desse evento em específico
+
+## Testes
+Para executar os testes de Service para User execute o seguinte comando:
+```bash
+./gradlew test -i --tests br.com.aceleradev.centralerrors.service.UserServiceTest
+```
