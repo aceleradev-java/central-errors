@@ -155,6 +155,21 @@ class UserServiceTest {
 		);
 	}
 	
+	@Test
+	void shouldShowErrorOnUpdateWhenUsernameAlreadyExist() {
+		//given
+		User user = createUserWithId();
+		given(this.repository.findById(any(Long.class))).willReturn(Optional.of(user));
+		given(this.repository.save(any(User.class)))
+		.willThrow(new UsernameAlreadyExists("The username already exists. Choose another username"));
+		
+		//then
+		Assertions.assertThrows(
+			UsernameAlreadyExists.class, 
+			() -> this.service.update(user)
+		);
+	}
+	
 	private User createUser() {
 		return new User("adriano", "123", "Adriano dos Santos", true);
 	}
