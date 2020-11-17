@@ -18,7 +18,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import br.com.aceleradev.centralerrors.dto.UpdatePassword;
 import br.com.aceleradev.centralerrors.entity.User;
 import br.com.aceleradev.centralerrors.repository.UserRepository;
 
@@ -108,6 +110,33 @@ class UserServiceTest {
 		
 		//then
 		assertThat(3l, is(usersReturned.getTotalElements()));
+	}
+	
+	@Test
+	void shouldUpdatePassword() {
+		//given
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String passwordEncoded = passwordEncoder.encode("123");
+		String newPasswordEncoded = passwordEncoder.encode("1234");
+		User userFromDataBase = createUserWithId();
+		userFromDataBase.setPassword(passwordEncoded);
+		User userWithNewPassword = createUser();
+		userWithNewPassword.setPassword(newPasswordEncoded);
+		UpdatePassword passwordUpdated = UpdatePassword.builder()
+								.username("adriano")
+								.password("123")
+								.newPassword("1234")
+								.confirmPassword("1234")
+								.build();
+		
+		given(this.repository.findByUsername(any(String.class))).willReturn(userFromDataBase);
+		given(this.repository.save(any(User.class))).willReturn(userWithNewPassword);
+		
+		//when
+		User userWithPasswordUpdated = this.service.updatePassword(passwordUpdated);
+		
+		//then
+		assertThat(true, is(passwordEncoder.matches("1234", userWithPasswordUpdated.getPassword())));
 	}
 
 	private User createUser() {
