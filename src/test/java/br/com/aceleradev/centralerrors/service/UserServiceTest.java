@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import br.com.aceleradev.centralerrors.dto.UpdatePassword;
 import br.com.aceleradev.centralerrors.entity.User;
+import br.com.aceleradev.centralerrors.exception.UsernameAlreadyExists;
 import br.com.aceleradev.centralerrors.repository.UserRepository;
 
 @SpringBootTest
@@ -139,6 +141,20 @@ class UserServiceTest {
 		assertThat(true, is(passwordEncoder.matches("1234", userWithPasswordUpdated.getPassword())));
 	}
 
+	@Test
+	void shouldShowErrorOnSaveWhenUsernameAlreadyExist() {
+		//given
+		User user = createUser();
+		given(this.repository.save(any(User.class)))
+			.willThrow(new UsernameAlreadyExists("The username already exists. Choose another username"));
+		
+		//then
+		Assertions.assertThrows(
+			UsernameAlreadyExists.class, 
+			() -> this.service.save(user)
+		);
+	}
+	
 	private User createUser() {
 		return new User("adriano", "123", "Adriano dos Santos", true);
 	}
