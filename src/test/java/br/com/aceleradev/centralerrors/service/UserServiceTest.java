@@ -23,6 +23,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import br.com.aceleradev.centralerrors.dto.UpdatePassword;
 import br.com.aceleradev.centralerrors.entity.User;
+import br.com.aceleradev.centralerrors.exception.EntityNotFound;
 import br.com.aceleradev.centralerrors.exception.UsernameAlreadyExists;
 import br.com.aceleradev.centralerrors.repository.UserRepository;
 
@@ -168,6 +169,17 @@ class UserServiceTest {
 			UsernameAlreadyExists.class, 
 			() -> this.service.update(user)
 		);
+	}
+	
+	@Test
+	void shouldShowErrorOnUpdateWhenUserNotFound() {
+		//given
+		User user = createUserWithId();
+		given(this.repository.findById(any(Long.class)))
+			.willReturn(Optional.empty());
+
+		//then
+		Assertions.assertThrows(EntityNotFound.class, () -> this.service.update(user));
 	}
 	
 	private User createUser() {
