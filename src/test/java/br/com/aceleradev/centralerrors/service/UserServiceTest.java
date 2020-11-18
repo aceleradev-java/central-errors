@@ -200,6 +200,24 @@ class UserServiceTest {
 		);
 	}
 	
+	@Test
+	void shouldShowErrorOnUpdatePasswordWhenUserNotFound() {
+		//given
+		UpdatePassword newPassword = UpdatePassword.builder()
+				.password("123")
+				.newPassword("1234")
+				.confirmPassword("1234")
+				.username("adriano")
+				.build();
+		given(this.repository.findByUsername(any(String.class))).willReturn(null);
+		
+		//then
+		Assertions.assertThrows(
+			EntityNotFound.class,
+			() -> this.service.updatePassword(newPassword)
+		);
+	}
+	
 	private User createUser() {
 		return new User("adriano", "123", "Adriano dos Santos", true);
 	}
