@@ -23,6 +23,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import br.com.aceleradev.centralerrors.dto.UpdatePassword;
 import br.com.aceleradev.centralerrors.entity.User;
+import br.com.aceleradev.centralerrors.exception.ActionNotAllowed;
 import br.com.aceleradev.centralerrors.exception.EntityNotFound;
 import br.com.aceleradev.centralerrors.exception.PasswordNotMatchException;
 import br.com.aceleradev.centralerrors.exception.UsernameAlreadyExists;
@@ -214,6 +215,26 @@ class UserServiceTest {
 		//then
 		Assertions.assertThrows(
 			EntityNotFound.class,
+			() -> this.service.updatePassword(newPassword)
+		);
+	}
+	
+	@Test
+	void shouldShowErrorOnUpdatePasswordWhenCurrentPasswordIsWrong() {
+		//given
+		UpdatePassword newPassword = UpdatePassword.builder()
+				.password("wrong password")
+				.newPassword("1234")
+				.confirmPassword("1234")
+				.username("adriano")
+				.build();
+		User userFromDatabase = createUserWithId();
+		userFromDatabase.setPassword(new BCryptPasswordEncoder().encode("123"));
+		given(this.repository.findByUsername(any(String.class))).willReturn(userFromDatabase);
+		
+		//then
+		Assertions.assertThrows(
+			ActionNotAllowed.class,
 			() -> this.service.updatePassword(newPassword)
 		);
 	}
