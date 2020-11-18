@@ -24,6 +24,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import br.com.aceleradev.centralerrors.dto.UpdatePassword;
 import br.com.aceleradev.centralerrors.entity.User;
 import br.com.aceleradev.centralerrors.exception.EntityNotFound;
+import br.com.aceleradev.centralerrors.exception.PasswordNotMatchException;
 import br.com.aceleradev.centralerrors.exception.UsernameAlreadyExists;
 import br.com.aceleradev.centralerrors.repository.UserRepository;
 
@@ -180,6 +181,23 @@ class UserServiceTest {
 
 		//then
 		Assertions.assertThrows(EntityNotFound.class, () -> this.service.update(user));
+	}
+	
+	@Test
+	void shouldShowErrorOnUpdatePasswordWhenNewPasswordAndConfirmPasswordNotMatch() {
+		//given
+		UpdatePassword newPassword = UpdatePassword.builder()
+										.password("123")
+										.newPassword("1234")
+										.confirmPassword("12345")
+										.username("adriano")
+										.build();
+		
+		//then
+		Assertions.assertThrows(
+			PasswordNotMatchException.class, 
+			() -> this.service.updatePassword(newPassword)
+		);
 	}
 	
 	private User createUser() {
