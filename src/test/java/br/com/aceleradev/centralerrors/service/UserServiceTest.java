@@ -239,6 +239,19 @@ class UserServiceTest {
 		);
 	}
 	
+	@Test
+	void shouldShowErrorOnFindUserByIdWhenUserNotFound() {
+		//given
+		User user = createUserWithId();
+		given(this.repository.findById(any(Long.class))).willThrow(new EntityNotFound("User not found"));
+		
+		//then
+		Assertions.assertThrows(
+			EntityNotFound.class,
+			() -> this.service.findById(user.getId())
+		);
+	}
+	
 	private User createUser() {
 		return new User("adriano", "123", "Adriano dos Santos", true);
 	}
