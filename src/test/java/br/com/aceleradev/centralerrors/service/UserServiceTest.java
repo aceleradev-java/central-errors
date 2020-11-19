@@ -252,6 +252,19 @@ class UserServiceTest {
 		);
 	}
 	
+	@Test
+	void shouldShowErrorOnDeleteWhenUserNotFound() {
+		//given
+		User user = createUserWithId();
+		given(this.repository.findById(any(Long.class))).willThrow(new EntityNotFound("User not found"));
+		
+		//then
+		Assertions.assertThrows(
+			EntityNotFound.class,
+			() -> this.service.delete(user.getId())
+		);
+	}
+	
 	private User createUser() {
 		return new User("adriano", "123", "Adriano dos Santos", true);
 	}
