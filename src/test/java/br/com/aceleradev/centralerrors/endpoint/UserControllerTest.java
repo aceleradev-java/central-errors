@@ -13,6 +13,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import br.com.aceleradev.centralerrors.entity.User;
 import br.com.aceleradev.centralerrors.service.UserService;
 
@@ -25,6 +27,9 @@ class UserControllerTest {
 	
 	@Autowired
 	private UserService service;
+	
+    @Autowired
+    private ObjectMapper objectMapper;
 
 	
 	private HttpHeaders getAdminHeaders() throws Exception {
@@ -38,6 +43,24 @@ class UserControllerTest {
 		adminHeader.setBearerAuth(authorizationValue);
     	return adminHeader;
     }
+	
+	@Test
+	void shouldSaveAnUser() throws Exception {
+		User user = new User("carlos", "123", "Carlos dos Santos", true);
+		MvcResult result = mockMvc
+				.perform(MockMvcRequestBuilders.post("/v1/users")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(objectMapper.writeValueAsString(user))
+						.headers(this.getAdminHeaders()))
+				.andDo(MockMvcResultHandlers.print())
+				.andExpect(MockMvcResultMatchers.status().isCreated())
+				.andReturn();
+		Assertions.assertThat(result.getResponse().getContentAsString())
+		.contains("\"id\":")
+		.contains("\"username\":")
+		.contains("\"name\":")
+		.contains("\"admin\":");
+	}
     
 	@Test
 	void findById() throws Exception {
