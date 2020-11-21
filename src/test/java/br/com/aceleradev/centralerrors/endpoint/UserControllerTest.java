@@ -61,6 +61,20 @@ class UserControllerTest {
 		.contains("\"name\":")
 		.contains("\"admin\":");
 	}
+	
+	@Test
+	void shoulFindAllUsers() throws Exception {
+		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/v1/admin/users")
+						.headers(getAdminHeaders()))
+					.andDo(MockMvcResultHandlers.print())
+					.andExpect(MockMvcResultMatchers.status().isOk())
+					.andReturn();
+		Assertions.assertThat(result.getResponse().getContentAsString())
+		.contains("\"id\":")
+		.contains("\"username\":")
+		.contains("\"name\":")
+		.contains("\"admin\":");
+	}
     
 	@Test
 	void shouldFindUserById() throws Exception {
