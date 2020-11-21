@@ -63,7 +63,7 @@ class UserControllerTest {
 	}
     
 	@Test
-	void findById() throws Exception {
+	void shouldFindUserById() throws Exception {
 		User user = new User("adriano", "123", "Adriano dos Santos", true);
 		this.service.save(user);
 		String id = user.getId().toString();
@@ -76,10 +76,10 @@ class UserControllerTest {
 				.andReturn();
 		
 		Assertions.assertThat(result.getResponse().getContentAsString())
-		.contains("\"id\":3")
-		.contains("\"username\":\"adriano\"")
-		.contains("\"name\":\"Adriano dos Santos\"")
-		.contains("\"admin\":true");
+		.contains("\"id\":")
+		.contains("\"username\":")
+		.contains("\"name\":")
+		.contains("\"admin\":");
 	}
 
 }
