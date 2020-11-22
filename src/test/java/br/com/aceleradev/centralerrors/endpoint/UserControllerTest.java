@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.com.aceleradev.centralerrors.dto.UserResquestUpdate;
 import br.com.aceleradev.centralerrors.entity.User;
 import br.com.aceleradev.centralerrors.service.UserService;
 
@@ -94,6 +95,33 @@ class UserControllerTest {
 		.contains("\"username\":")
 		.contains("\"name\":")
 		.contains("\"admin\":");
+	}
+	
+	@Test
+	void shouldUpdateAnUser() throws Exception, Exception {
+		User user = new User("jose", "123", "Jose da Silva", true);
+		this.service.save(user);
+		UserResquestUpdate userUpdated = UserResquestUpdate.builder()
+											.id(user.getId())
+											.username("joseAtualizado")
+											.password("1324")
+											.name("Jose Ferreira")
+											.admin(false)
+											.build();
+
+		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/v1/admin/users")
+						.headers(this.getAdminHeaders())
+						.contentType(MediaType.APPLICATION_JSON)
+					.content(objectMapper.writeValueAsString(userUpdated)))
+					.andDo(MockMvcResultHandlers.print())
+					.andExpect(MockMvcResultMatchers.status().isOk())
+					.andReturn();
+
+		Assertions.assertThat(result.getResponse().getContentAsString())
+			.contains("\"id\":")
+			.contains("\"username\":")
+			.contains("\"name\":")
+			.contains("\"admin\":");
 	}
 
 }
