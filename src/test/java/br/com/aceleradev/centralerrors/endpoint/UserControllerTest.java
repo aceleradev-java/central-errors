@@ -46,6 +46,18 @@ class UserControllerTest {
     	return adminHeader;
     }
 	
+	private HttpHeaders getDefaultUser() throws Exception {
+		String authenticationCredential = "{\"username\":\"user\",\"password\":\"123\"}";
+		MvcResult authenticationResult = mockMvc.perform(MockMvcRequestBuilders.post("/login")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(authenticationCredential))
+				.andReturn();
+		String authorizationValue = authenticationResult.getResponse().getContentAsString();
+		HttpHeaders adminHeader = new HttpHeaders();
+		adminHeader.setBearerAuth(authorizationValue);
+		return adminHeader;
+	}
+	
 	@Test
 	void shouldSaveAnUser() throws Exception {
 		User user = new User("carlos", "123", "Carlos dos Santos", true);
@@ -214,6 +226,18 @@ class UserControllerTest {
 		.contains("\"status\":")
 		.contains("\"date\":")
 		.contains("\"title\":");
+	}
+	
+	@Test
+	void shouldShowErrorOnUpdateWhenActionNotAllowedByDefaultUser() throws Exception {
+		User user = new User(2l,"nazare", "123", "Maria nazaré", true);
+		
+		mockMvc.perform(MockMvcRequestBuilders.put("/v1/admin/users")
+					.headers(this.getDefaultUser())
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(objectMapper.writeValueAsString(user)))
+				.andExpect(MockMvcResultMatchers.status().isForbidden())
+				.andDo(MockMvcResultHandlers.print());
 	}
 
 }
