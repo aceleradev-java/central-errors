@@ -151,5 +151,16 @@ class UserControllerTest {
 		.contains("\"name\":")
 		.contains("\"admin\":");
 	}
+	
+	@Test
+	void shouldDeleteAnUser() throws Exception {
+		User user = new User("alex", "123", "Alex Silva", true);
+		this.service.save(user);
+		
+		mockMvc.perform(MockMvcRequestBuilders.delete("/v1/admin/users/" + user.getId())
+						   		.headers(getAdminHeaders()))
+							.andDo(MockMvcResultHandlers.print())
+							.andExpect(MockMvcResultMatchers.status().isNoContent());
+	}
 
 }
