@@ -179,5 +179,24 @@ class UserControllerTest {
 		.contains("\"date\":")
 		.contains("\"title\":");
 	}
+	
+	@Test
+	void shouldShowErrorOnUpdateUserWhenTheUsernameAlreadyExist() throws Exception {
+		User user = new User(1l,"user", "123", "Maria dos Santos", true);
+		
+		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/v1/admin/users")
+						.headers(this.getAdminHeaders())
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(objectMapper.writeValueAsString(user)))
+					.andExpect(MockMvcResultMatchers.status().isConflict())
+					.andDo(MockMvcResultHandlers.print())
+					.andReturn();
+		
+		Assertions.assertThat(result.getResponse().getContentAsString())
+		.contains("\"status\":")
+		.contains("\"date\":")
+		.contains("\"title\":");
+	}
+	}
 
 }
