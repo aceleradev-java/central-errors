@@ -162,5 +162,22 @@ class UserControllerTest {
 							.andDo(MockMvcResultHandlers.print())
 							.andExpect(MockMvcResultMatchers.status().isNoContent());
 	}
+	
+	@Test
+	void shouldShowErrorOnSaveAnUserWhenTheUsernameAlreadyExist() throws Exception {
+		User user = new User("admin", "123", "Maria dos Santos", true);
+		
+		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/v1/users")
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(objectMapper.writeValueAsString(user)))
+				.andExpect(MockMvcResultMatchers.status().isConflict())
+				.andDo(MockMvcResultHandlers.print())
+				.andReturn();
+		
+		Assertions.assertThat(result.getResponse().getContentAsString())
+		.contains("\"status\":")
+		.contains("\"date\":")
+		.contains("\"title\":");
+	}
 
 }
