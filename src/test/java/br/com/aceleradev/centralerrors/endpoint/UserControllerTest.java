@@ -197,6 +197,23 @@ class UserControllerTest {
 		.contains("\"date\":")
 		.contains("\"title\":");
 	}
+	
+	@Test
+	void shouldShowErrorOnUpdateUserWhenTheUserNotFound() throws Exception {
+		User user = new User(100l,"domingos", "123", "Domingos dos Santos", true);
+		
+		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/v1/admin/users")
+								.headers(this.getAdminHeaders())
+								.contentType(MediaType.APPLICATION_JSON)
+								.content(objectMapper.writeValueAsString(user)))
+							.andExpect(MockMvcResultMatchers.status().isNotFound())
+							.andDo(MockMvcResultHandlers.print())
+							.andReturn();
+		
+		Assertions.assertThat(result.getResponse().getContentAsString())
+		.contains("\"status\":")
+		.contains("\"date\":")
+		.contains("\"title\":");
 	}
 
 }
