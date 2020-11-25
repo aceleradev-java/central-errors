@@ -261,5 +261,26 @@ class UserControllerTest {
 		.contains("date")
 		.contains("title");
 	}
+	
+	@Test
+	void shouldShowErrorOnUpdatePasswordWhenUserNotFound() throws Exception {
+		UpdatePassword newPassword = UpdatePassword.builder()
+													.username("notfound")
+													.password("123")
+													.newPassword("1234")
+													.confirmPassword("1234")
+													.build();
+		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/v1/protected/updatepassword")
+								.headers(this.getAdminHeaders())
+								.contentType(MediaType.APPLICATION_JSON)
+								.content(objectMapper.writeValueAsString(newPassword)))
+							.andDo(MockMvcResultHandlers.print())
+							.andExpect(MockMvcResultMatchers.status().isNotFound())
+							.andReturn();
+		Assertions.assertThat(result.getResponse().getContentAsString())
+		.contains("status")
+		.contains("date")
+		.contains("title");
+	}
 
 }
