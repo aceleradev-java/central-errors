@@ -239,5 +239,27 @@ class UserControllerTest {
 				.andExpect(MockMvcResultMatchers.status().isForbidden())
 				.andDo(MockMvcResultHandlers.print());
 	}
+	
+	@Test
+	void shouldShowErrorOnUpdatePasswordWhenNewPasswordAndConfirmNewPasswordAreDiferent() throws Exception {
+		UpdatePassword newPassword = UpdatePassword.builder()
+		.username("user")
+		.password("123")
+		.newPassword("1234")
+		.confirmPassword("12345")
+		.build();
+		
+		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/v1/protected/updatepassword")
+					.headers(this.getAdminHeaders())
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(objectMapper.writeValueAsString(newPassword)))
+				.andExpect(MockMvcResultMatchers.status().isBadRequest())
+				.andDo(MockMvcResultHandlers.print())
+				.andReturn();
+		Assertions.assertThat(result.getResponse().getContentAsString())
+		.contains("status")
+		.contains("date")
+		.contains("title");
+	}
 
 }
