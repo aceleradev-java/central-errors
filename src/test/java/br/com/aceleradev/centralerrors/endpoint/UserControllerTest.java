@@ -282,5 +282,26 @@ class UserControllerTest {
 		.contains("date")
 		.contains("title");
 	}
+	
+	@Test
+	void shouldShowErrorOnUpdatePasswordWhenActionIsNotAllowedWithWrongPassword() throws Exception {
+		UpdatePassword newPassword = UpdatePassword.builder()
+				.username("user")
+				.password("wrongPassword")
+				.newPassword("1234")
+				.confirmPassword("1234")
+				.build();
+		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/v1/protected/updatepassword")
+				.headers(this.getAdminHeaders())
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(newPassword)))
+				.andDo(MockMvcResultHandlers.print())
+				.andExpect(MockMvcResultMatchers.status().isForbidden())
+				.andReturn();
+		Assertions.assertThat(result.getResponse().getContentAsString())
+		.contains("status")
+		.contains("date")
+		.contains("title");
+	}
 
 }
