@@ -2,6 +2,8 @@ package br.com.aceleradev.centralerrors.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -61,7 +63,9 @@ public class UserService implements UserServiceInterface {
         if (userFound == null) throw new EntityNotFound(USER_NOT_FOUND);
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        if (!passwordEncoder.matches(user.getPassword(), userFound.getPassword())) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userAuthenticated = authentication.getName();
+        if (!passwordEncoder.matches(user.getPassword(), userFound.getPassword()) || !user.getUsername().equals(userAuthenticated)) {
             throw new ActionNotAllowed("You don't have permission to update the password this user");
         }
 

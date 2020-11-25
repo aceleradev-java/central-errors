@@ -58,6 +58,18 @@ class UserControllerTest {
 		return adminHeader;
 	}
 	
+	private HttpHeaders getCustomUser(String user, String password) throws Exception {
+		String authenticationCredential = "{\"username\":\""+ user+ "\",\"password\":\""+ password +"\"}";
+		MvcResult authenticationResult = mockMvc.perform(MockMvcRequestBuilders.post("/login")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(authenticationCredential))
+				.andReturn();
+		String authorizationValue = authenticationResult.getResponse().getContentAsString();
+		HttpHeaders adminHeader = new HttpHeaders();
+		adminHeader.setBearerAuth(authorizationValue);
+		return adminHeader;
+	}
+	
 	@Test
 	void shouldSaveAnUser() throws Exception {
 		User user = new User("carlos", "123", "Carlos dos Santos", true);
@@ -150,7 +162,7 @@ class UserControllerTest {
 												.build();
 		
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/v1/protected/updatepassword")
-						.headers(getAdminHeaders())
+						.headers(this.getCustomUser(userWithNewPassword.getUsername(), userWithNewPassword.getPassword()))
 						.content(objectMapper.writeValueAsString(userWithNewPassword))
 						.contentType(MediaType.APPLICATION_JSON))
 					.andDo(MockMvcResultHandlers.print())
@@ -288,6 +300,27 @@ class UserControllerTest {
 		UpdatePassword newPassword = UpdatePassword.builder()
 				.username("user")
 				.password("wrongPassword")
+				.newPassword("1234")
+				.confirmPassword("1234")
+				.build();
+		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/v1/protected/updatepassword")
+				.headers(this.getAdminHeaders())
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(newPassword)))
+				.andDo(MockMvcResultHandlers.print())
+				.andExpect(MockMvcResultMatchers.status().isForbidden())
+				.andReturn();
+		Assertions.assertThat(result.getResponse().getContentAsString())
+		.contains("status")
+		.contains("date")
+		.contains("title");
+	}
+	
+	@Test
+	void shouldShowErrorOnUpdatePasswordWhenActionIsNotAllowedAndUserAuthenticatedIsNotTheOwner() throws Exception {
+		UpdatePassword newPassword = UpdatePassword.builder()
+				.username("user")
+				.password("123")
 				.newPassword("1234")
 				.confirmPassword("1234")
 				.build();
