@@ -352,4 +352,12 @@ class UserControllerTest {
 		.contains("date")
 		.contains("title");
 	}
+	
+	@Test
+	void shouldShowErrorOnFindUserByIdWhenUserNotAuthenticated() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get("/v1/admin/users/1"))
+		    	.andDo(MockMvcResultHandlers.print())
+				.andExpect(MockMvcResultMatchers.status().isForbidden());
+	}
+	
 }
