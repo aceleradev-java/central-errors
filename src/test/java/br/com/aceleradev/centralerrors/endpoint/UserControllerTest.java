@@ -337,4 +337,19 @@ class UserControllerTest {
 		.contains("title");
 	}
 
+	@Test
+	void shouldShowErrorOnFindUserByIdWhenUserNotFound() throws Exception {
+		User user = new User(99l, "teste", "123", "Teste", true);
+		
+		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/v1/admin/users/" + user.getId())
+						.headers(this.getAdminHeaders()))
+					.andDo(MockMvcResultHandlers.print())
+					.andExpect(MockMvcResultMatchers.status().isNotFound())
+					.andReturn();
+		
+		Assertions.assertThat(result.getResponse().getContentAsString())
+		.contains("status")
+		.contains("date")
+		.contains("title");
+	}
 }
