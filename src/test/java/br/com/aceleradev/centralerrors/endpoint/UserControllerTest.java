@@ -360,4 +360,12 @@ class UserControllerTest {
 				.andExpect(MockMvcResultMatchers.status().isForbidden());
 	}
 	
+	@Test
+	void shouldShowErrorOnFindUserByIdWhenUserIsNotAdmin() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get("/v1/admin/users/1")
+					.headers(this.getDefaultUser()))
+			.andDo(MockMvcResultHandlers.print())
+			.andExpect(MockMvcResultMatchers.status().isForbidden());
+	}
+
 }
