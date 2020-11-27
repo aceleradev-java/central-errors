@@ -375,5 +375,12 @@ class UserControllerTest {
 		.andDo(MockMvcResultHandlers.print())
 		.andExpect(MockMvcResultMatchers.status().isNotFound());
 	}
+	
+	@Test
+	void shouldShowErrorOnDeleteWhenUserNotAuthenticated() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.delete("/v1/admin/users/2"))
+			.andDo(MockMvcResultHandlers.print())
+			.andExpect(MockMvcResultMatchers.status().isForbidden());
+	}
 
 }
