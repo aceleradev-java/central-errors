@@ -480,7 +480,17 @@ Exemplo de resposta:
 ```
 
 ## Testes
-Para executar os testes de Service para User execute o seguinte comando:
+Testes de Service para User:
 ```bash
 ./gradlew test -i --tests br.com.aceleradev.centralerrors.service.UserServiceTest
+```
+
+Testes de Controller para User:
+```bash
+./gradlew test -i --tests br.com.aceleradev.centralerrors.endpoint.UserControllerTest
+```
+
+Testes de Repository para User:
+```bash
+./gradlew test -i --tests br.com.aceleradev.centralerrors.repository.UserRepositoryTest
 ```
