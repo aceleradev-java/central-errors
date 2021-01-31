@@ -19,6 +19,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import br.com.aceleradev.centralerrors.dto.UpdatePassword;
@@ -34,6 +37,12 @@ class UserServiceTest {
 
 	@MockBean
 	private UserRepository repository;
+	
+	@MockBean
+	private Authentication authentication;
+
+	@MockBean
+	private SecurityContext securityContext;
 	
 	@Autowired
 	private UserService service;
@@ -134,6 +143,10 @@ class UserServiceTest {
 								.confirmPassword("1234")
 								.build();
 		
+		given(securityContext.getAuthentication()).willReturn(authentication);
+		SecurityContextHolder.setContext(securityContext);
+		given(authentication.getName()).willReturn("adriano");
+		
 		given(this.repository.findByUsername(any(String.class))).willReturn(userFromDataBase);
 		given(this.repository.save(any(User.class))).willReturn(userWithNewPassword);
 		
@@ -228,6 +241,11 @@ class UserServiceTest {
 				.confirmPassword("1234")
 				.username("adriano")
 				.build();
+		
+		given(securityContext.getAuthentication()).willReturn(authentication);
+		SecurityContextHolder.setContext(securityContext);
+		given(authentication.getName()).willReturn("adriano");
+		
 		User userFromDatabase = createUserWithId();
 		userFromDatabase.setPassword(new BCryptPasswordEncoder().encode("123"));
 		given(this.repository.findByUsername(any(String.class))).willReturn(userFromDatabase);
