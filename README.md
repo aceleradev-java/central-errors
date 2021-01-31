@@ -44,6 +44,19 @@ O acesso a ela deve ser permitido apenas por requisições que utilizem um token
 - A consulta de listagem não deve retornar os LOGs dos Eventos
 - Deve permitir a busca de um evento por um ID, dessa maneira exibindo o LOG desse evento em específico
 
+## Começando
+Para configurar o ambiente de desenvolvimento execute os seguintes comandos:
+```bash
+#clone o projeto
+git clone https://github.com/aceleradev-java/central-errors.git
+
+#entre no diretório
+cd central-errors
+
+#inicie a aplicação
+./gradlew bootRun
+```
+
 ## Testes
 Para executar os testes de Service para User execute o seguinte comando:
 ```bash
