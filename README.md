@@ -25,16 +25,16 @@ Em projetos modernos é cada vez mais comum o uso de arquiteturas baseadas em se
 
 Abaixo estão os requisitos desta API, o time terá total liberdade para tomar as decisões técnicas e de arquitetura da API, desde que atendam os requisitos abaixo.
 
-## API
-### Tecnologia
+### API
+#### Tecnologia
 Utilizar a tecnologia base da aceleração para o desenvolvimento (Exemplo: Java, Node.js)
 
-### Premissas
+#### Premissas
 A API deve ser pensada para atender diretamente um front-end
 Deve ser capaz de gravar os logs de erro em um banco de dados relacional
 O acesso a ela deve ser permitido apenas por requisições que utilizem um token de acesso válido
 
-### Funcionalidades
+#### Funcionalidades
 - Deve permitir a autenticação do sistema que deseja utilizar a API gerando o Token de Acesso
 - Pode ser acessado por multiplos sistemas
 - Deve permitir gravar registros de eventos de log salvando informações de Level(error, warning, info), Descrição do Evento, LOG do Evento, ORIGEM(Sistema ou Serviço que originou o evento), DATA(Data do evento), - QUANTIDADE(Quantidade de Eventos de mesmo tipo)
